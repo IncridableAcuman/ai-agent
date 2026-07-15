@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: groq-chat-server
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    environment:
+      - API_KEY=${API_KEY}
+      - BASE_URL=${BASE_URL}
+    restart: always
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: groq-chat-client
+    ports:
+      - "5173:80"
+    depends_on:
+      - server
+    restart: always
